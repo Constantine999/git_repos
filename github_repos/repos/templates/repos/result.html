@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<div id="message" style="display: none;">Данные в обработке</div>
+<ul id="result" style="display: none;">
+    {% for repo in result %}
+    <li>{{ repo.name }} ({{ repo.stars }} звезд(ы))</li>
+    {% endfor %}
+</ul>
+
+
+<script>
+    window.onload = function() {
+        document.getElementById('message').style.display = 'block';
+        setTimeout(function() {
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+        }, 1500);
+    }
+</script>
+
