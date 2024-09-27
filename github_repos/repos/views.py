@@ -1,13 +1,13 @@
 from typing import Optional
 
+from asgiref.sync import sync_to_async, async_to_sync
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
-from django.utils.asyncio import async_unsafe
 
 from .tasks import get_data_repositories_by_username, get_celery_result_by_task_id, GithubData
 
 
-@async_unsafe
+@sync_to_async
 def index(request: HttpRequest) -> HttpResponse:
     if request.method == "POST" and request.POST["username"]:
         github_user = request.POST["username"]
@@ -21,10 +21,10 @@ def index(request: HttpRequest) -> HttpResponse:
     )
 
 
-@async_unsafe
+@sync_to_async
 def result(request: HttpRequest) -> HttpResponse:
     task_id: str = request.session.get("task_id")
-    result: Optional[GithubData] = get_celery_result_by_task_id(task_id=task_id)
+    result: Optional[GithubData] = async_to_sync(get_celery_result_by_task_id)(task_id, 6)
     if "Error" not in result:
         return render(
             request=request,

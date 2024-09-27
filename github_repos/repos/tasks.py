@@ -6,7 +6,7 @@ from typing import NewType, Optional
 
 import aiohttp
 import celery
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from celery.result import AsyncResult
 
 CELERY_RESULT_BACKEND = importlib.import_module("github_repos.settings").CELERY_RESULT_BACKEND
@@ -19,7 +19,6 @@ app = celery.Celery(
     broker="amqp://guest@localhost//",
     backend=CELERY_RESULT_BACKEND,
 )
-
 
 async def async_get_data_repositories_by_username(username: str) -> GithubData:
     url = f"https://api.github.com/users/{username}/repos"
@@ -39,6 +38,7 @@ def get_data_repositories_by_username(username: str) -> GithubData | ErrorMessag
     return {"Error": f"Пользователь с именем {username} - не зарегистрирован на github"}
 
 
+@sync_to_async
 def get_celery_result_by_task_id(task_id: str, timeout: int = 6) -> Optional[GithubData]:
     if task_id:
         task: AsyncResult = AsyncResult(id=task_id)
