@@ -36,14 +36,14 @@ def result(request: HttpRequest) -> HttpResponse:
             while task.status != "SUCCESS" and time.perf_counter() - start < TIMEOUT:
                 continue
 
-            return render(
-                request=request,
-                template_name="repos/result.html",
-                context={"result": task.result},
+            return (
+                render(request, "repos/result.html", {"result": task.result})
+                if "Error" not in task.result
+                else HttpResponse(task.result["Error"])
             )
 
         except celery.exceptions.TimeoutError:
             return HttpResponse(
                 content=f"Превышен лимит запроса в размере {TIMEOUT} секунд")
 
-    return None
+    return HttpResponse("Не получилось обработать запрос, попробуйте снова")
