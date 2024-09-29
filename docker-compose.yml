@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  github_repos:
+    build:
+      dockerfile: ./Dockerfile
+    depends_on:
+      - redis
+    ports:
+      - "7777:7777"
+    command:
+      bash -c "python -m uvicorn github_repos.asgi:application --host 0.0.0.0 --port 7777 & celery -A github_repos.celery worker -l info"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CELERY_BROKER_URL=redis://redis_server:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis_server:6379/0
+
+
+  redis:
+    container_name: redis_server
+    image: redis:alpine
+    command: redis-server
+    ports:
+      - "14000:6379"
+
+
+volumes:
+  redis-data:
