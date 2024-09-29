@@ -16,12 +16,17 @@ click-repl==0.3.0
 Django==5.1.1
 django-stubs==5.1.0
 django-stubs-ext==5.1.0
+docker==7.1.0
 frozenlist==1.4.1
+h11==0.14.0
 idna==3.10
+iniconfig==2.0.0
 kombu==5.4.2
 multidict==6.1.0
 mypy==1.11.2
 mypy-extensions==1.0.0
+packaging==24.1
+pluggy==1.5.0
 prompt_toolkit==3.0.47
 python-dateutil==2.9.0.post0
 redis==5.0.8
@@ -33,6 +38,7 @@ types-requests==2.32.0.20240914
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.3
+uvicorn==0.30.6
 vine==5.1.0
 wcwidth==0.2.13
 yarl==1.12.1
