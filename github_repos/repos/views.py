@@ -11,7 +11,7 @@ from .tasks import get_data_repositories_by_username, get_celery_result_by_task_
 def index(request: HttpRequest) -> HttpResponse:
     if request.method == "POST" and request.POST["username"]:
         github_user = request.POST["username"]
-        task_id: Optional[str] = get_data_repositories_by_username.apply_async(args=[github_user]).id
+        task_id: str = get_data_repositories_by_username.apply_async(args=[github_user]).id
         request.session["task_id"] = task_id
         return redirect("result")
 
@@ -24,7 +24,7 @@ def index(request: HttpRequest) -> HttpResponse:
 @sync_to_async
 def result(request: HttpRequest) -> HttpResponse:
     task_id: str = request.session.get("task_id")
-    result: Optional[GithubData] = async_to_sync(get_celery_result_by_task_id)(task_id, 6)
+    result: Optional[GithubData] = async_to_sync(get_celery_result_by_task_id)(task_id, 4)
     if "Error" not in result:
         return render(
             request=request,

@@ -27,6 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS: list[str] = [
     "localhost",
     "127.0.0.1",
+    "0.0.0.0",
 ]
 
 # Application definition
@@ -122,5 +123,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery settings
-CELERY_IGNORE_RESULT = True
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
